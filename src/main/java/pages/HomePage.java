@@ -5,6 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class HomePage extends BasePage{
 
@@ -31,6 +34,9 @@ public class HomePage extends BasePage{
     @FindBy(css = "button[type='submit']")
     WebElement btnYalla;
 
+    @FindBy(css = "button.positive-button")
+    private WebElement loggedInPopupOkButton;
+
 
     public void clickBtnLoginHeader() {
         btnLoginHeader.click();
@@ -43,12 +49,16 @@ public class HomePage extends BasePage{
 
 
     public void enterCity(String city) {
+        new WebDriverWait(driver, Duration.ofSeconds(3))
+                .until(ExpectedConditions.visibilityOf(inputCity));
         inputCity.clear();
         inputCity.sendKeys(city);
     }
 
 
     public void enterDates(String dates) {
+        new WebDriverWait(driver, Duration.ofSeconds(3))
+                .until(ExpectedConditions.visibilityOf(inputDates));
         inputDates.clear();
         inputDates.sendKeys(dates);
     }
@@ -56,5 +66,16 @@ public class HomePage extends BasePage{
 
     public void clickYalla() {
         btnYalla.click();
+    }
+
+
+    public void closeLoggedInPopup() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            wait.until(ExpectedConditions.elementToBeClickable(loggedInPopupOkButton));
+            loggedInPopupOkButton.click();
+        } catch (Exception e) {
+            System.out.println("Pop-up 'Logged In' didn't appear");
+        }
     }
 }

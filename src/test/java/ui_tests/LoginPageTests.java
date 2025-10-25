@@ -1,11 +1,39 @@
 package ui_tests;
 
+import data_transfer_object.User;
 import manager.ApplicationManager;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.LoginPage;
 
 public class LoginPageTests extends ApplicationManager {
+
+   /* @Test
+    public void loginPositiveTestLomBok(){
+        User user = User.builder()
+                .email("kiririri22@gmail.com")
+                .password("Abc22@$hgf")
+                .build();
+        new HomePage(getDriver()).clickBtnLoginHeader();
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.typeLoginFormWithUser(user);
+        Assert.assertTrue(loginPage.isLoggedDisplayed());
+    } */
+
+
+    /*@Test
+    public void loginNegativeTestLomBokWrongPassword(){
+        User user = User.builder()
+                .email("kiririri22@gmail.com")
+                .password("abc2266hgf")
+                .build();
+        new HomePage(getDriver()).clickBtnLoginHeader();
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.typeLoginFormWithUser(user);
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
+    } */
+
 
     @Test
     public void loginPositiveTest(){
@@ -13,6 +41,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@gmail.com", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedDisplayed());
     }
 
 
@@ -22,6 +51,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("KIRIRIRI22@gmail.com", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedDisplayed());
     }
 
 
@@ -31,6 +61,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(" kiririri22@gmail.com ", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedDisplayed());
     }
 
 
@@ -40,6 +71,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@gmail.com", " Abc22@$hgf ");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -49,6 +81,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -58,6 +91,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("  ", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -67,6 +101,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22gmail.com", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -76,6 +111,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@.com", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -85,6 +121,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("@gmail.com", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -94,6 +131,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@gmail", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -103,6 +141,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@@gmail.com", "Abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -112,6 +151,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@gmail.com", "  ");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -121,6 +161,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@gmail.com", "");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -130,6 +171,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@gmail.com", "abc22@$hgf");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -139,6 +181,7 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@gmail.com", "ABC22@$HGF");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 
 
@@ -148,5 +191,6 @@ public class LoginPageTests extends ApplicationManager {
         homePage.clickBtnLoginHeader();
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm("kiririri22@gmail.com", "jkl11$@mnb");
+        Assert.assertTrue(loginPage.isLoggedIncorrect());
     }
 }

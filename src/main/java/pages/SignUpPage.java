@@ -3,13 +3,14 @@ package pages;
 import data_transfer_object.User;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
-public class RegistrationPage extends BasePage{
+public class SignUpPage extends BasePage{
 
-    public RegistrationPage(WebDriver driver) {
+    public SignUpPage(WebDriver driver) {
         setDriver(driver);
         driver.get("https://ilcarro.web.app/registration");
         PageFactory.initElements
@@ -29,11 +30,20 @@ public class RegistrationPage extends BasePage{
     @FindBy(css = "input#password")
     WebElement inputPassword;
 
+    @FindBy(id = "terms-of-use")
+    WebElement checkboxInput;
+
     @FindBy(css = "label.checkbox-label")
-    WebElement checkboxTerms;
+    WebElement checkboxLabel;
 
     @FindBy(css = "button[type='submit']")
     WebElement btnRegister;
+
+    @FindBy(xpath = "//h2[text()='Registered']")
+    WebElement popUpTextRegistered;
+
+    @FindBy(xpath = "//h2[text()='User already exists']")
+    WebElement popUpTextUserExists;
 
 
     public void enterFirstName(String firstName) {
@@ -61,9 +71,18 @@ public class RegistrationPage extends BasePage{
 
 
     public void agreeToTerms() {
-        if (!checkboxTerms.isSelected())
-            checkboxTerms.click();
+        if (!checkboxInput.isSelected()) {
+            Actions actions = new Actions(driver);
+            actions.moveToElement(checkboxInput).click().perform();
+            pause(10);
+        }
     }
+
+
+   /* public void clickCheckBoxWithActions(){
+        Actions actions = new Actions(driver);
+        actions.moveToElement(checkboxTerms, -50, 0).click().perform();
+    }*/
 
 
     public void clickRegister() {
@@ -77,6 +96,25 @@ public class RegistrationPage extends BasePage{
         enterEmail(user.getEmail());
         enterPassword(user.getPassword());
         agreeToTerms();
+        //clickCheckBoxWithActions();
         clickRegister();
+    }
+
+
+    public void typeLoginForm(User user) {
+        inputFirstName.sendKeys(user.getFirstName());
+        inputLastName.sendKeys(user.getLastName());
+        inputEmail.sendKeys(user.getEmail());
+        inputPassword.sendKeys(user.getPassword());
+    }
+
+
+    public boolean isRegisteredDisplayed() {
+        return elementIsDisplayed(popUpTextRegistered);
+    }
+
+
+    public boolean isUserAlreadyExistsDisplayed() {
+        return elementIsDisplayed(popUpTextUserExists);
     }
 }

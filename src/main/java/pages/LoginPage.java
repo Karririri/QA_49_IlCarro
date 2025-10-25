@@ -26,6 +26,12 @@ public class LoginPage extends BasePage{
     @FindBy(css = "button[type='submit']")
     WebElement btnLoginForm;
 
+    @FindBy(xpath = "//h2[text()='Logged in success']")
+    WebElement popUpTextLoggedSuccess;
+
+    @FindBy(xpath = "//h2[contains(text(),'Login or Password incorrect')]")
+    WebElement popUpTextLoggedIncorrect;
+
 
     public void typeLoginForm(String email, String password) {
         inputEmail.clear();
@@ -42,5 +48,23 @@ public class LoginPage extends BasePage{
         inputPassword.clear();
         inputPassword.sendKeys(user.getPassword());
         btnLoginForm.click();
+    }
+
+
+    public boolean isLoggedDisplayed() {
+        try {
+            return popUpTextLoggedSuccess.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    public boolean isLoggedIncorrect() {
+        try {
+            return popUpTextLoggedIncorrect.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
