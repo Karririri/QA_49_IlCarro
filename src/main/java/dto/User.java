@@ -1,18 +1,16 @@
-package data_transfer_object;
+package dto;
 
 import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @ToString
-@Builder
-
 public class User {
-    private String email;
+    private String username;
     private String password;
     private String firstName;
     private String lastName;
-
 }

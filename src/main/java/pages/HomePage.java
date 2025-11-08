@@ -1,81 +1,99 @@
 package pages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
-public class HomePage extends BasePage{
+import java.time.LocalDate;
+import java.util.Locale;
 
-    public HomePage(WebDriver driver){
+public class HomePage extends BasePage {
+    public HomePage(WebDriver driver) {
         setDriver(driver);
         driver.get("https://ilcarro.web.app/search");
-        PageFactory.initElements
-                (new AjaxElementLocatorFactory(driver, 10), this);
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
     }
 
-
-    @FindBy(css = "a[href^='/login']")
+    @FindBy(xpath = "//a[text()=' Log in ']")
     WebElement btnLoginHeader;
 
-    @FindBy(css = "a[href^='/registration']")
+    @FindBy(xpath = "//a[text()=' Sign up ']")
     WebElement btnSignUpHeader;
 
-    @FindBy(css = "input[formcontrolname='city']")
+    @FindBy(id = "city")
     WebElement inputCity;
-
-    @FindBy(css = "#dates")
+    @FindBy(id = "dates")
     WebElement inputDates;
-
-    @FindBy(css = "button[type='submit']")
+    @FindBy(xpath = "//button[@type='submit']")
     WebElement btnYalla;
-
-    @FindBy(css = "button.positive-button")
-    private WebElement loggedInPopupOkButton;
-
 
     public void clickBtnLoginHeader() {
         btnLoginHeader.click();
     }
 
-
     public void clickBtnSignUpHeader() {
         btnSignUpHeader.click();
     }
 
-
-    public void enterCity(String city) {
-        new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.visibilityOf(inputCity));
-        inputCity.clear();
+    public void typeSearchForm(String city, LocalDate dateFrom, LocalDate dateTo) {
         inputCity.sendKeys(city);
-    }
-
-
-    public void enterDates(String dates) {
-        new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.visibilityOf(inputDates));
-        inputDates.clear();
+        //System.out.println(dateFrom.toString());
+        String dates = dateFrom.getMonthValue() + "/"
+                + dateFrom.getDayOfMonth() + "/"
+                + dateFrom.getYear() + " - "
+                + dateTo.getMonthValue() + "/"
+                + dateTo.getDayOfMonth() + "/"
+                + dateTo.getYear();
         inputDates.sendKeys(dates);
+        JavascriptExecutor  js = (JavascriptExecutor) driver;
+        js.executeScript("document.querySelector(\"button[type='submit']\").removeAttribute(\"disabled\")");
+        //btnYalla.click();
+        clickWait(btnYalla, 3);
     }
 
-
-    public void clickYalla() {
+    public void typeSearchFormWOJS(String city, LocalDate dateFrom, LocalDate dateTo) {
+        inputCity.sendKeys(city);
+        String dates = dateFrom.getMonthValue() + "/"
+                + dateFrom.getDayOfMonth() + "/"
+                + dateFrom.getYear() + " - "
+                + dateTo.getMonthValue() + "/"
+                + dateTo.getDayOfMonth() + "/"
+                + dateTo.getYear();
+        inputDates.sendKeys(dates);
+        //clickWait(btnYalla, 3);
         btnYalla.click();
     }
 
+    @FindBy(xpath = "//button[@aria-label='Choose month and year']")
+    WebElement calendarBtnYear;
 
-    public void closeLoggedInPopup() {
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            wait.until(ExpectedConditions.elementToBeClickable(loggedInPopupOkButton));
-            loggedInPopupOkButton.click();
-        } catch (Exception e) {
-            System.out.println("Pop-up 'Logged In' didn't appear");
-        }
+
+    private void typeCalendar(LocalDate date){
+        calendarBtnYear.click();
+        String year = Integer.toString(date.getYear());  //2025   2026
+        WebElement btnYear = driver.findElement(By.xpath("//td[@aria-label='"+year+"']"));
+        //  "//td[@aria-label='"+year+"']" --> "//td[@aria-label='"   "2026"   "']" -->  //td[@aria-label='2026']
+        btnYear.click();
+
+        //   //td[@aria-label="December 2025"]
+        String month = date.getMonth().toString();
+        System.out.println(month);  // DECEMBER  -- > December
+        month = month.toLowerCase();
+        String first = month.substring(0, 1).toUpperCase();
+        month = month.replace(month.substring(0, 1), first);
+        System.out.println(month);
+        WebElement btnMonth = driver.findElement(By.xpath("//td[@aria-label='"+month+" "+year+"']"));
+        btnMonth.click();
+    }
+
+    public void typeSearchFormCalendar(String city, LocalDate dateFrom, LocalDate dateTo) {
+        inputCity.sendKeys(city);
+        inputDates.click();
+        pause(5);
+        typeCalendar(dateFrom);
     }
 }

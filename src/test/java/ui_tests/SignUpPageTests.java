@@ -1,6 +1,6 @@
 package ui_tests;
 
-import data_transfer_object.User;
+import dto.User;
 import manager.ApplicationManager;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -21,521 +21,419 @@ public class SignUpPageTests extends ApplicationManager {
     }
 
 
-    /*@Test
+    @Test
     public void registrationPositiveTest(){
         User user = positiveUser();
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-    }*/
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextDialogContainerPresent());
+    }
+
 
     @Test
-    public void registrationPositiveTest(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
+    public void registrationPositiveTest_UpperCaseFirstName(){
+        User user = positiveUser();
+        user.setFirstName(user.getFirstName().toUpperCase());
+        signUpPage.typeLoginForm(user);
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextDialogContainerPresent());
+    }
+
+
+    @Test
+    public void registrationPositiveTest_TrimSpacesFirstName() {
+        User user = positiveUser();
+        user.setFirstName(" " + user.getFirstName() + " ");
+        signUpPage.typeLoginForm(user);
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextDialogContainerPresent());
+    }
+
+
+    @Test
+    public void registrationPositiveTest_TrimSpacesPassword() {
+        User user = positiveUser();
+        user.setPassword(" " + user.getPassword() + " ");
+        signUpPage.typeLoginForm(user);
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextDialogContainerPresent());
+    }
+
+
+    @Test
+    public void registrationPositiveTest_PasswordMinBorder8Chars() {
+        User user = positiveUser();
+        user.setPassword("Passwo1!");
+        signUpPage.typeLoginForm(user);
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextDialogContainerPresent());
+    }
+
+
+    @Test
+    public void registrationNegativeTest_ExistingUser() {
         User user = User.builder()
                 .firstName("Ivan")
                 .lastName("Ivanov")
-                .email("ivan22@gmail.com")
+                .username("ivan22@gmail.com")
                 .password("Password123!")
                 .build();
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
-    }
-
-
-    @Test  //failed
-    public void registrationPositiveTest_UpperCaseEmail(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Vasiliy")
-                .lastName("Vasiliev")
-                .email("VASILIY22@gmail.com")
-                .password("Password123!")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("User already exists"));
     }
 
 
     @Test
-    public void registrationPositiveTest_TrimSpacesEmail(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Anton")
-                .lastName("Antonov")
-                .email(" anton22@gmail.com ")
-                .password("Password123!")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
-    }
-
-
-    @Test
-    public void registrationPositiveTest_TrimSpacesPassword(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Anna")
-                .lastName("Annova")
-                .email("annushka22@gmail.com")
-                .password(" Password123! ")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
-    }
-
-
-    @Test
-    public void registrationPositiveTest_PasswordMinBorder8Chars(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Evgeniy")
-                .lastName("Evgeniev")
-                .email("evgeniy22@gmail.com")
-                .password("Passwo1!")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
-    }
-
-
-    @Test
-    public void registrationNegativeTest_ExistingUser(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Ivan")
-                .lastName("Ivanov")
-                .email("ivan22@gmail.com")
-                .password("Password123!")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isUserAlreadyExistsDisplayed());
-    }
-
-
-    @Test
-    public void registrationNegativeTest_EmptyName(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
+    public void registrationNegativeTest_EmptyName() {
         User user = User.builder()
                 .firstName("")
                 .lastName("Egorov")
-                .email("egor22@gmail.com")
+                .username("egor22@gmail.com")
                 .password("Password123!")
                 .build();
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertFalse(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Name is required"));
     }
 
 
     @Test
-    public void registrationNegativeTest_NameSpacesOnly(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("  ")
-                .lastName("Egorov")
-                .email("egor22@gmail.com")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_NameSpacesOnly() {
+        User user = positiveUser();
+        user.setFirstName("  ");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
-    }
-
-
-    @Test  //failed
-    public void registrationNegativeTest_NonEnglishName(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Егорый")
-                .lastName("Egorov")
-                .email("egor22@gmail.com")
-                .password("Password123!")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
-    }
-
-
-    @Test  //failed
-    public void registrationNegativeTest_Name54Chars(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("SergeySergeySergeySergeySergeySergeySergeySergeySergey")
-                .lastName("Sergeev")
-                .email("sergey22@gmail.com")
-                .password("Password123!")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Name is required"));
     }
 
 
     @Test
-    public void registrationNegativeTest_EmptyLastName(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Igor")
-                .lastName("")
-                .email("igor22@gmail.com")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_NonEnglishName() {
+        User user = positiveUser();
+        user.setFirstName("Егорый");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertFalse(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Non English letters"));
     }
 
 
     @Test
-    public void registrationNegativeTest_LastNameSpacesOnly(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Igor")
-                .lastName("  ")
-                .email("igor22@gmail.com")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_Name54Chars() {
+        User user = positiveUser();
+        user.setFirstName("SergeySergeySergeySergeySergeySergeySergeySergeySergey");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
-    }
-
-
-    @Test  //failed
-    public void registrationNegativeTest_NonEnglishLastName(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Igor")
-                .lastName("Игорьев")
-                .email("igor22@gmail.com")
-                .password("Password123!")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
-    }
-
-
-    @Test  //failed
-    public void registrationNegativeTest_LastName54Chars(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Gleb")
-                .lastName("GlebovGlebovGlebovGlebovGlebovGlebovGlebovGleb")
-                .email("gleb22@gmail.com")
-                .password("Password123!")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Name is too long"));
     }
 
 
     @Test
-    public void registrationNegativeTest_EmptyEmail(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_EmptyLastName() {
+        User user = positiveUser();
+        user.setFirstName("Igor");
+        user.setLastName("");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Last name is required"));
     }
 
 
     @Test
-    public void registrationNegativeTest_EmailSpacesOnly(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("  ")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_LastNameSpacesOnly() {
+        User user = positiveUser();
+        user.setFirstName("Igor");
+        user.setLastName("  ");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Last name is required"));
     }
 
 
     @Test
-    public void registrationNegativeTest_EmailNotAt(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("alex22gmail.com")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_NonEnglishLastName() {
+        User user = positiveUser();
+        user.setFirstName("Igor");
+        user.setLastName("Игорьев");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Non English letters"));
     }
 
 
     @Test
-    public void registrationNegativeTest_EmailInvalidDomain(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("alex22@.com")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_LastName54Chars() {
+        User user = positiveUser();
+        user.setFirstName("Gleb");
+        user.setLastName("GlebovGlebovGlebovGlebovGlebovGlebovGlebovGleb");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Last name is too long"));
     }
 
 
     @Test
-    public void registrationNegativeTest_EmailMissingLocalPart(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("@gmail.com")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_EmptyEmail() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("");
+        user.setPassword("Password123!");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Email is required"));
     }
 
 
     @Test
-    public void registrationNegativeTest_EmailMissingDomain(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("alex22@gmail")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_EmailSpacesOnly() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("  ");
+        user.setPassword("Password123!");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Email is required"));
     }
 
 
     @Test
-    public void registrationNegativeTest_EmailDoubleAt(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("alex22@@gmail.com")
-                .password("Password123!")
-                .build();
+    public void registrationNegativeTest_EmailNotAt() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("alex22gmail.com");
+        user.setPassword("Password123!");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Invalid email"));
     }
 
 
     @Test
-    public void registrationNegativeTest_EmptyPassword(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("alex22@gmail.com")
-                .password("")
-                .build();
+    public void registrationNegativeTest_EmailInvalidDomain() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("alex22@.com");
+        user.setPassword("Password123!");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Invalid email"));
     }
 
 
     @Test
-    public void registrationNegativeTest_PasswordSpacesOnly(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("alex22@gmail.com")
-                .password("  ")
-                .build();
+    public void registrationNegativeTest_EmailMissingLocalPart() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("@gmail.com");
+        user.setPassword("Password123!");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
-    }
-
-
-    @Test  //failed
-    public void registrationNegativeTest_PasswordTooLong60Chars(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Alex")
-                .lastName("Alexeev")
-                .email("alex22@gmail.com")
-                .password("Password1!SuperLongSecurePasswordWithExtraSymbols123!@#Test")
-                .build();
-        signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Invalid email"));
     }
 
 
     @Test
-    public void registrationNegativeTest_PasswordLessBorderMin(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Misha")
-                .lastName("Miheev")
-                .email("misha22@gmail.com")
-                .password("Ab1$xyz")
-                .build();
+    public void registrationNegativeTest_EmailMissingDomain() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("alex22@gmail");
+        user.setPassword("Password123!");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Invalid email"));
     }
 
 
     @Test
-    public void registrationNegativeTest_PasswordLowerCaseOnly(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Misha")
-                .lastName("Miheev")
-                .email("misha22@gmail.com")
-                .password("password!1")
-                .build();
+    public void registrationNegativeTest_EmailDoubleAt() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("alex22@@gmail.com");
+        user.setPassword("Password123!");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Invalid email"));
     }
 
 
     @Test
-    public void registrationNegativeTest_PasswordUpperCaseOnly(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Misha")
-                .lastName("Miheev")
-                .email("misha22@gmail.com")
-                .password("PASSWORD!1")
-                .build();
+    public void registrationNegativeTest_EmptyPassword() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("alex22@gmail.com");
+        user.setPassword("");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password is required"));
     }
 
 
     @Test
-    public void registrationNegativeTest_PasswordNoNumbers(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Misha")
-                .lastName("Miheev")
-                .email("misha22@gmail.com")
-                .password("Password!!")
-                .build();
+    public void registrationNegativeTest_PasswordSpacesOnly() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("alex22@gmail.com");
+        user.setPassword("  ");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password is required"));
     }
 
 
     @Test
-    public void registrationNegativeTest_PasswordNoSpecialSymbols(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Misha")
-                .lastName("Miheev")
-                .email("misha22@gmail.com")
-                .password("Password11")
-                .build();
+    public void registrationNegativeTest_PasswordTooLong60Chars() {
+        User user = positiveUser();
+        user.setFirstName("Alex");
+        user.setLastName("Alexeev");
+        user.setUsername("alex22@gmail.com");
+        user.setPassword("Password1!SuperLongSecurePasswordWithExtraSymbols123!@#Test");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password is too long"));
     }
 
 
     @Test
-    public void registrationNegativeTest_PasswordNoLetters(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Misha")
-                .lastName("Miheev")
-                .email("misha22@gmail.com")
-                .password("2@$#*20911")
-                .build();
+    public void registrationNegativeTest_PasswordLessBorderMin() {
+        User user = positiveUser();
+        user.setFirstName("Misha");
+        user.setLastName("Miheev");
+        user.setUsername("misha22@gmail.com");
+        user.setPassword("Ab1$xyz");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password is too short"));
     }
 
 
     @Test
-    public void registrationNegativeTest_PasswordNonEngLetters(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Misha")
-                .lastName("Miheev")
-                .email("misha22@gmail.com")
-                .password("Аб1#ДеЁж")
-                .build();
+    public void registrationNegativeTest_PasswordLowerCaseOnly() {
+        User user = positiveUser();
+        user.setFirstName("Misha");
+        user.setLastName("Miheev");
+        user.setUsername("misha22@gmail.com");
+        user.setPassword("password!1");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password must contain uppercase letters"));
     }
 
 
     @Test
-    public void registrationNegativeTest_PasswordInvalidSpecialSymbols(){
-        SignUpPage signUpPage = new SignUpPage(getDriver());
-        User user = User.builder()
-                .firstName("Misha")
-                .lastName("Miheev")
-                .email("misha22@gmail.com")
-                .password("Password1]")
-                .build();
+    public void registrationNegativeTest_PasswordUpperCaseOnly() {
+        User user = positiveUser();
+        user.setFirstName("Misha");
+        user.setLastName("Miheev");
+        user.setUsername("misha22@gmail.com");
+        user.setPassword("PASSWORD!1");
         signUpPage.typeLoginForm(user);
-        signUpPage.agreeToTerms();
-        signUpPage.clickRegister();
-        Assert.assertTrue(signUpPage.isRegisteredDisplayed());
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password must contain lowercase letters"));
+    }
+
+
+    @Test
+    public void registrationNegativeTest_PasswordNoNumbers() {
+        User user = positiveUser();
+        user.setFirstName("Misha");
+        user.setLastName("Miheev");
+        user.setUsername("misha22@gmail.com");
+        user.setPassword("Password!!");
+        signUpPage.typeLoginForm(user);
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password must contain numbers"));
+    }
+
+
+    @Test
+    public void registrationNegativeTest_PasswordNoSpecialSymbols() {
+        User user = positiveUser();
+        user.setFirstName("Misha");
+        user.setLastName("Miheev");
+        user.setUsername("misha22@gmail.com");
+        user.setPassword("Password11");
+        signUpPage.typeLoginForm(user);
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password must contain special symbols"));
+    }
+
+
+    @Test
+    public void registrationNegativeTest_PasswordNoLetters() {
+        User user = positiveUser();
+        user.setFirstName("Misha");
+        user.setLastName("Miheev");
+        user.setUsername("misha22@gmail.com");
+        user.setPassword("2@$#*20911");
+        signUpPage.typeLoginForm(user);
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password must contain letters"));
+    }
+
+
+    @Test
+    public void registrationNegativeTest_PasswordNonEngLetters() {
+        User user = positiveUser();
+        user.setFirstName("Misha");
+        user.setLastName("Miheev");
+        user.setUsername("misha22@gmail.com");
+        user.setPassword("Аб1#ДеЁж");
+        signUpPage.typeLoginForm(user);
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password must contain only English letters"));
+    }
+
+
+    @Test
+    public void registrationNegativeTest_PasswordInvalidSpecialSymbols() {
+        User user = positiveUser();
+        user.setFirstName("Misha");
+        user.setLastName("Miheev");
+        user.setUsername("misha22@gmail.com");
+        user.setPassword("Password1]");
+        signUpPage.typeLoginForm(user);
+        signUpPage.clickCheckBoxWithActions();
+        signUpPage.clickBtnYalla();
+        Assert.assertTrue(signUpPage.isTextInErrorPresent("Password contains invalid special symbol"));
     }
 }

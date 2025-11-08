@@ -1,6 +1,6 @@
 package pages;
 
-import data_transfer_object.User;
+import dto.User;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -9,112 +9,55 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
 public class SignUpPage extends BasePage{
-
-    public SignUpPage(WebDriver driver) {
+    public SignUpPage(WebDriver driver){
         setDriver(driver);
-        driver.get("https://ilcarro.web.app/registration");
-        PageFactory.initElements
-                (new AjaxElementLocatorFactory(driver, 10), this);
+        PageFactory.initElements(
+                new AjaxElementLocatorFactory(driver, 10), this);
     }
 
-
-    @FindBy(css = "input#name")
-    WebElement inputFirstName;
-
-    @FindBy(css = "input#lastName")
+    @FindBy(id = "name")
+    WebElement inputName;
+    @FindBy(id = "lastName")
     WebElement inputLastName;
-
-    @FindBy(css = "input#email")
+    @FindBy(id = "email")
     WebElement inputEmail;
-
-    @FindBy(css = "input#password")
+    @FindBy(id = "password")
     WebElement inputPassword;
-
-    @FindBy(id = "terms-of-use")
-    WebElement checkboxInput;
-
-    @FindBy(css = "label.checkbox-label")
-    WebElement checkboxLabel;
+    @FindBy(xpath = "//label[@for='terms-of-use']")
+    WebElement checkBoxIAgree;
 
     @FindBy(css = "button[type='submit']")
-    WebElement btnRegister;
+    WebElement btnYalla;
+    @FindBy(xpath = "//mat-dialog-container//h2")
+    WebElement textDialogContainer;
 
-    @FindBy(xpath = "//h2[text()='Registered']")
-    WebElement popUpTextRegistered;
-
-    @FindBy(xpath = "//h2[text()='User already exists']")
-    WebElement popUpTextUserExists;
-
-
-    public void enterFirstName(String firstName) {
-        inputFirstName.clear();
-        inputFirstName.sendKeys(firstName);
-    }
-
-
-    public void enterLastName(String lastName) {
-        inputLastName.clear();
-        inputLastName.sendKeys(lastName);
-    }
-
-
-    public void enterEmail(String email) {
-        inputEmail.clear();
-        inputEmail.sendKeys(email);
-    }
-
-
-    public void enterPassword(String password) {
-        inputPassword.clear();
-        inputPassword.sendKeys(password);
-    }
-
-
-    public void agreeToTerms() {
-        if (!checkboxInput.isSelected()) {
-            Actions actions = new Actions(driver);
-            actions.moveToElement(checkboxInput).click().perform();
-            pause(10);
-        }
-    }
-
-
-   /* public void clickCheckBoxWithActions(){
-        Actions actions = new Actions(driver);
-        actions.moveToElement(checkboxTerms, -50, 0).click().perform();
-    }*/
-
-
-    public void clickRegister() {
-        btnRegister.click();
-    }
-
-
-    public void registerUser(User user, String firstName, String lastName) {
-        enterFirstName(firstName);
-        enterLastName(lastName);
-        enterEmail(user.getEmail());
-        enterPassword(user.getPassword());
-        agreeToTerms();
-        //clickCheckBoxWithActions();
-        clickRegister();
-    }
 
 
     public void typeLoginForm(User user) {
-        inputFirstName.sendKeys(user.getFirstName());
+        inputName.sendKeys(user.getFirstName());
         inputLastName.sendKeys(user.getLastName());
-        inputEmail.sendKeys(user.getEmail());
+        inputEmail.sendKeys(user.getUsername());
         inputPassword.sendKeys(user.getPassword());
     }
 
-
-    public boolean isRegisteredDisplayed() {
-        return elementIsDisplayed(popUpTextRegistered);
+    public void clickCheckBox(){
+        checkBoxIAgree.click();
     }
 
+    public void clickCheckBoxWithActions(){
+        int y = checkBoxIAgree.getSize().getHeight();
+        int x = checkBoxIAgree.getSize().getWidth();
+        System.out.println(x+"X"+y);
 
-    public boolean isUserAlreadyExistsDisplayed() {
-        return elementIsDisplayed(popUpTextUserExists);
+        Actions actions = new Actions(driver);
+        actions.moveToElement(checkBoxIAgree, -(x/10*4), -(y/4)).click().perform();
+    }
+
+    public void clickBtnYalla(){
+        btnYalla.click();
+    }
+
+    public boolean isTextDialogContainerPresent(){
+        return elementIsDisplayed(textDialogContainer);
     }
 }

@@ -1,6 +1,6 @@
 package pages;
 
-import data_transfer_object.User;
+import dto.User;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,23 +8,20 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
 public class LoginPage extends BasePage{
-
     public LoginPage(WebDriver driver){
         setDriver(driver);
-        driver.get("https://ilcarro.web.app/login");
-        PageFactory.initElements
-                (new AjaxElementLocatorFactory(driver, 10), this);
+        PageFactory.initElements(
+                new AjaxElementLocatorFactory(driver, 10), this);
     }
 
-
-    @FindBy(css = "input#email")
+    @FindBy(id = "email")
     WebElement inputEmail;
 
-    @FindBy(css = "input#password")
+    @FindBy(id = "password")
     WebElement inputPassword;
 
-    @FindBy(css = "button[type='submit']")
-    WebElement btnLoginForm;
+    @FindBy(xpath = "//button[@type='submit']")
+    WebElement btnYalla;
 
     @FindBy(xpath = "//h2[text()='Logged in success']")
     WebElement popUpTextLoggedSuccess;
@@ -32,39 +29,17 @@ public class LoginPage extends BasePage{
     @FindBy(xpath = "//h2[contains(text(),'Login or Password incorrect')]")
     WebElement popUpTextLoggedIncorrect;
 
-
-    public void typeLoginForm(String email, String password) {
-        inputEmail.clear();
-        inputEmail.sendKeys(email);
-        inputPassword.clear();
-        inputPassword.sendKeys(password);
-        btnLoginForm.click();
-    }
-
-
-    public void typeLoginFormWithUser(User user) {
-        inputEmail.clear();
-        inputEmail.sendKeys(user.getEmail());
-        inputPassword.clear();
+    public void typeLoginForm(User user){
+        inputEmail.sendKeys(user.getUsername());
         inputPassword.sendKeys(user.getPassword());
-        btnLoginForm.click();
+        btnYalla.click();
     }
 
-
-    public boolean isLoggedDisplayed() {
-        try {
-            return popUpTextLoggedSuccess.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+    public boolean isLoggedDisplayed(){
+        return elementIsDisplayed(popUpTextLoggedSuccess);
     }
 
-
-    public boolean isLoggedIncorrect() {
-        try {
-            return popUpTextLoggedIncorrect.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
+    public boolean isLoggedIncorrect(){
+        return elementIsDisplayed(popUpTextLoggedIncorrect);
     }
 }
