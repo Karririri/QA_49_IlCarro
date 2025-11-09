@@ -28,6 +28,16 @@ public class SearchCarTests extends ApplicationManager {
     }
 
 
+    @Test
+    public void searchCarWithCalendarTest() {
+        String city = "Haifa";
+        LocalDate dateFrom = LocalDate.of(2025, 12, 13);
+        LocalDate dateTo = LocalDate.of(2025, 12, 20);
+        homePage.typeSearchFormCalendar(city, dateFrom, dateTo);
+        Assert.assertTrue(homePage.urlContains("results", 5));
+    }
+
+
     @Test(expectedExceptions = org.openqa.selenium.TimeoutException.class)
     public void searchNegativeTestWOCity(){
         String city = "";

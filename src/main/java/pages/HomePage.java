@@ -7,11 +7,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.Locale;
 
 public class HomePage extends BasePage {
+
     public HomePage(WebDriver driver) {
         setDriver(driver);
         driver.get("https://ilcarro.web.app/search");
@@ -26,74 +31,88 @@ public class HomePage extends BasePage {
 
     @FindBy(id = "city")
     WebElement inputCity;
+
     @FindBy(id = "dates")
     WebElement inputDates;
+
     @FindBy(xpath = "//button[@type='submit']")
     WebElement btnYalla;
+
+    @FindBy(xpath = "//button[@aria-label='Choose month and year']")
+    WebElement calendarBtnYear;
 
     public void clickBtnLoginHeader() {
         btnLoginHeader.click();
     }
 
+
     public void clickBtnSignUpHeader() {
         btnSignUpHeader.click();
     }
 
+
     public void typeSearchForm(String city, LocalDate dateFrom, LocalDate dateTo) {
         inputCity.sendKeys(city);
-        //System.out.println(dateFrom.toString());
-        String dates = dateFrom.getMonthValue() + "/"
-                + dateFrom.getDayOfMonth() + "/"
-                + dateFrom.getYear() + " - "
-                + dateTo.getMonthValue() + "/"
-                + dateTo.getDayOfMonth() + "/"
-                + dateTo.getYear();
+        String dates = dateFrom.getMonthValue() + "/" + dateFrom.getDayOfMonth() + "/" + dateFrom.getYear()
+                + " - " + dateTo.getMonthValue() + "/" + dateTo.getDayOfMonth() + "/" + dateTo.getYear();
         inputDates.sendKeys(dates);
-        JavascriptExecutor  js = (JavascriptExecutor) driver;
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("document.querySelector(\"button[type='submit']\").removeAttribute(\"disabled\")");
-        //btnYalla.click();
         clickWait(btnYalla, 3);
     }
 
+
     public void typeSearchFormWOJS(String city, LocalDate dateFrom, LocalDate dateTo) {
         inputCity.sendKeys(city);
-        String dates = dateFrom.getMonthValue() + "/"
-                + dateFrom.getDayOfMonth() + "/"
-                + dateFrom.getYear() + " - "
-                + dateTo.getMonthValue() + "/"
-                + dateTo.getDayOfMonth() + "/"
-                + dateTo.getYear();
+
+        String dates = dateFrom.getMonthValue() + "/" + dateFrom.getDayOfMonth() + "/" + dateFrom.getYear()
+                + " - " + dateTo.getMonthValue() + "/" + dateTo.getDayOfMonth() + "/" + dateTo.getYear();
         inputDates.sendKeys(dates);
-        //clickWait(btnYalla, 3);
         btnYalla.click();
     }
 
-    @FindBy(xpath = "//button[@aria-label='Choose month and year']")
-    WebElement calendarBtnYear;
 
-
-    private void typeCalendar(LocalDate date){
+    private void typeCalendar(LocalDate date) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         calendarBtnYear.click();
-        String year = Integer.toString(date.getYear());  //2025   2026
-        WebElement btnYear = driver.findElement(By.xpath("//td[@aria-label='"+year+"']"));
-        //  "//td[@aria-label='"+year+"']" --> "//td[@aria-label='"   "2026"   "']" -->  //td[@aria-label='2026']
+        String year = String.valueOf(date.getYear());
+        WebElement btnYear = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//td[@aria-label='" + year + "']")));
         btnYear.click();
-
-        //   //td[@aria-label="December 2025"]
-        String month = date.getMonth().toString();
-        System.out.println(month);  // DECEMBER  -- > December
-        month = month.toLowerCase();
-        String first = month.substring(0, 1).toUpperCase();
-        month = month.replace(month.substring(0, 1), first);
-        System.out.println(month);
-        WebElement btnMonth = driver.findElement(By.xpath("//td[@aria-label='"+month+" "+year+"']"));
+        String month = date.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+        WebElement btnMonth = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//td[@aria-label='" + month + " " + year + "']")));
         btnMonth.click();
     }
+
+
+    private void selectDay(LocalDate date) {
+        String ariaLabel = date.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+                + " " + date.getDayOfMonth() + ", " + date.getYear();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement dayBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id='sat-datepicker-0']//*[@aria-label='" + ariaLabel + "']")));
+        dayBtn.click();
+    }
+
+
+    public void clickYalla() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("document.querySelector(\"button[type='submit']\").removeAttribute(\"disabled\")");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(btnYalla)).click();
+    }
+
 
     public void typeSearchFormCalendar(String city, LocalDate dateFrom, LocalDate dateTo) {
         inputCity.sendKeys(city);
         inputDates.click();
-        pause(5);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(calendarBtnYear));
         typeCalendar(dateFrom);
+        selectDay(dateFrom);
+        typeCalendar(dateTo);
+        selectDay(dateTo);
+        clickYalla();
     }
 }
