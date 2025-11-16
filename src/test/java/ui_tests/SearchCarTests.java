@@ -1,14 +1,18 @@
 package ui_tests;
 
+import data_providers.SearchCarDP;
 import manager.ApplicationManager;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pages.BasePage;
 import pages.HomePage;
+import utils.TestNGListener;
 
 import java.time.LocalDate;
 
+@Listeners(TestNGListener.class)
 public class SearchCarTests extends ApplicationManager {
 
     HomePage homePage;
@@ -28,10 +32,26 @@ public class SearchCarTests extends ApplicationManager {
     }
 
 
+    @Test(dataProvider = "searchCarDataFromFile", dataProviderClass = SearchCarDP.class)
+    public void searchPositiveTestCSV(String city, LocalDate dateFrom, LocalDate dateTo){
+        homePage.typeSearchForm(city, dateFrom, dateTo);
+        Assert.assertTrue(homePage.urlContains("results", 3));
+    }
+
+
+    @Test(expectedExceptions = org.openqa.selenium.TimeoutException.class)
+    public void searchNegativeTestWOCity1(){
+        String city = "";
+        LocalDate dateFrom = LocalDate.of(2025, 12, 1);
+        LocalDate dateTo = LocalDate.of(2025, 12, 22);
+        homePage.typeSearchFormWOJS(city, dateFrom, dateTo);
+    }
+
+
     @Test
     public void searchCarWithCalendarTest() {
         String city = "Haifa";
-        LocalDate dateFrom = LocalDate.of(2025, 12, 13);
+        LocalDate dateFrom = LocalDate.of(2025, 11, 13);
         LocalDate dateTo = LocalDate.of(2025, 12, 20);
         homePage.typeSearchFormCalendar(city, dateFrom, dateTo);
         Assert.assertTrue(homePage.urlContains("results", 5));
