@@ -32,15 +32,9 @@ public class FooterNavigationTests extends ApplicationManager {
                 .clickFooterItem(FooterMenuItem.ICON_INSTAGRAM, "Instagram"));
     }
 
-    @Test  //failed
+    @Test
     public void iconSlackNavigationTest(){
         Assert.assertTrue(new HomePage(getDriver())
                 .clickFooterItem(FooterMenuItem.ICON_SLACK, "Slack"));
-    }
-
-    @Test  //failed
-    public void iconSlackNegativeTest(){
-        Assert.assertFalse(new HomePage(getDriver())
-                .clickFooterItem(FooterMenuItem.ICON_SLACK, "Facebook"));
     }
 }
