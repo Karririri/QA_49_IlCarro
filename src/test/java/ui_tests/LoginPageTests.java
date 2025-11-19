@@ -9,6 +9,7 @@ import pages.HomePage;
 import pages.LoginPage;
 import utils.RetryAnalyzer;
 import utils.TestNGListener;
+import utils.enums.HeaderMenuItem;
 
 import java.lang.reflect.Method;
 
@@ -22,7 +23,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("Abc22@$hgf")
                 .build();
         logger.info("start test " + method.getName() + " with data " + user);
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         logger.error("example error");
@@ -36,7 +37,7 @@ public class LoginPageTests extends ApplicationManager {
                 .username("KIRIRIRI22@gmail.com")
                 .password("Abc22@$hgf")
                 .build();
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedDisplayed());
@@ -50,7 +51,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("Abc22@$hgf")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedDisplayed());
@@ -64,7 +65,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password(" Abc22@$hgf ")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -78,7 +79,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("Abc22@$hgf")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -92,7 +93,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("Abc22@$hgf")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -106,7 +107,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("Abc22@$hgf")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -120,7 +121,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("Abc22@$hgf")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -134,7 +135,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("Abc22@$hgf")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -148,7 +149,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("Abc22@$hgf")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -162,7 +163,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("Abc22@$hgf")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -176,7 +177,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("  ")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -190,7 +191,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -204,7 +205,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("abc22@$hgf")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -218,7 +219,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("ABC22@$HGF")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());
@@ -232,7 +233,7 @@ public class LoginPageTests extends ApplicationManager {
                 .password("jkl11$@mnb")
                 .build();
 
-        new HomePage(getDriver()).clickBtnLoginHeader();
+        new HomePage(getDriver()).clickBtnLoginHeader(HeaderMenuItem.LOGIN);
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.typeLoginForm(user);
         Assert.assertTrue(loginPage.isLoggedIncorrect());

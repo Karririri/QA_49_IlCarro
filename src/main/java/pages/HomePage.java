@@ -9,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.enums.FooterMenuItem;
+import utils.enums.HeaderMenuItem;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -41,7 +43,7 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//button[@aria-label='Choose month and year']")
     WebElement calendarBtnYear;
 
-    public void clickBtnLoginHeader() {
+    public void clickBtnLoginHeader(HeaderMenuItem login) {
         btnLoginHeader.click();
     }
 
@@ -114,5 +116,12 @@ public class HomePage extends BasePage {
         typeCalendar(dateTo);
         selectDay(dateTo);
         clickYalla();
+    }
+
+
+    public boolean clickFooterItem(FooterMenuItem item, String title){
+        driver.findElement(By.cssSelector(item.getLocator())).click();
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.titleContains(title));
     }
 }

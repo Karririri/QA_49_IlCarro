@@ -7,20 +7,24 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import utils.enus.HeaderMenuItem;
+import utils.enums.HeaderMenuItem;
 
 import java.time.Duration;
 import java.util.List;
 
 public abstract class BasePage {
-    static WebDriver driver;
+    public static WebDriver driver;
 
     public static void setDriver(WebDriver wd) {
         driver = wd;
     }
 
-    @FindBy(css = "div[class='error']")
+    //    @FindBy(css = "div[class='error']")
+//    List<WebElement> listErrorElements;
+    @FindBy(xpath = "//div[contains(@class,'error')]")
     List<WebElement> listErrorElements;
+    @FindBy(xpath = "//mat-dialog-container//button")
+    WebElement btnOkPopUp;
 
     public boolean isTextInErrorPresent(String text) {
         if (listErrorElements == null || listErrorElements.isEmpty())
